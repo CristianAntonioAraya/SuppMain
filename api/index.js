@@ -1,17 +1,31 @@
 import express from 'express';
-import dotenv from 'dotenv';
+import 'dotenv/config';
+import './database.js';
 import appRouter from './router/appRouter.js';
-
-dotenv.config();
+import {
+    boomErrorHandler,
+    handleError,
+    logError,
+} from './middleware/ErrorHandler.js';
 
 class Server {
     constructor() {
         this.app = express();
         this.port = process.env.PORT || 3000;
+        this.middleware();
         this.routes();
+    }
+    middleware() {
+        this.app.use(express.json());
     }
     routes() {
         appRouter(this.app);
+        this.handleErrors();
+    }
+    handleErrors() {
+        this.app.use(logError);
+        this.app.use(boomErrorHandler);
+        this.app.use(handleError);
     }
     init() {
         this.app.listen(this.port);

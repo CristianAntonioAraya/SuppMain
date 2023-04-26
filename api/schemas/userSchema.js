@@ -15,13 +15,13 @@ const createUserSchema = Joi.object({
     userName: userName.required(),
     password: password.required(),
     email: email.required(),
-    role: role.required(),
+    role: role.default('user'),
 });
 
 const updateUserSchema = Joi.object({
     userName: userName.required(),
     password: password.required(),
-    role: role.required(),
+    email: email.required(),
 });
 
 export { getUserSchema, createUserSchema, updateUserSchema };

@@ -1,12 +1,10 @@
-version: '3.1'
+version: '3.8'
 
 services:
     mongo:
         image: mongo
         restart: always
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
-            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+        container_name: mymongo
         volumes:
             - ./mongo-volume:/data/db
         ports:
@@ -14,10 +12,13 @@ services:
 
     mongo-express:
         image: mongo-express
+        container_name: mongo-express
         restart: always
         ports:
             - 8081:8081
         environment:
             ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGOEXPRESS_LOGIN}
             ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGOEXPRESS_PASSWORD}
-            ME_CONFIG_MONGODB_SERVER: mongo
+            ME_CONFIG_MONGODB_URL: mongodb://mymongo:27017/
+        logging:
+            driver: none
