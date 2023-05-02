@@ -63,9 +63,34 @@ const getAllTicketsByOwner = async (req, res, next) => {
     }
 };
 
+const deleteTicket = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        await services.delete(id);
+        res.json({ ok: true, msg: 'Ticket delete correcly' });
+    } catch (error) {
+        next(error);
+    }
+};
+const updateTicket = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const ticketData = req.body;
+        await services.update(id, ticketData);
+        res.json({
+            ok: true,
+            msg: 'Ticket updated correcly',
+            ticket: ticketData,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 export {
     getAllTickets,
     createNewTicket,
     getSingleTicket,
     getAllTicketsByOwner,
+    deleteTicket,
+    updateTicket,
 };
